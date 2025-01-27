@@ -2,6 +2,7 @@
 # the SLD, h(n), of the children of the current city to the goal city.
 
 from CityMatrix import road_map, Map, get_cities_input
+from typing import Tuple, List
 
 DEBUG = False
 
@@ -16,7 +17,7 @@ class Greedy:
         self.path = []
         self.visited = []
 
-    def find_path(self, source: str, destination: str):
+    def find_path(self, source: str, destination: str) -> Tuple[List[str], int]:
         currentCity = road_map.get_city(source)
 
         # Distance to destination is 0, return path
@@ -57,23 +58,20 @@ class Greedy:
         return self.find_path(currentCity[0], destination)
 
 
-def test_greedy():
+def test_greedy() -> None:
     romania_map = Greedy(road_map)
-    if DEBUG:
-        print("\n")
+    print("\n")
 
     # path with a cycle
     assert romania_map.find_path("Timisoara", "Neamt") == (
         [], -1), "Cycle test failed."
-    if DEBUG:
-        print("\n\n")
+    print("\n\n")
 
     # regular test
     assert romania_map.find_path("Arad", "Bucharest") == ([
         'Zerind', 'Oradea', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest'],
         575), "Regular test failed"
-    if DEBUG:
-        print("\n\n")
+    print("\n\n")
 
     # long path
     assert romania_map.find_path("Arad", "Eforie") == ([
@@ -88,8 +86,7 @@ def test_greedy():
         # test passes
         pass
 
-    if DEBUG:
-        print("\ntests pasted")
+    print("\ntests pasted")
 
 
 if __name__ == "__main__":
@@ -98,11 +95,11 @@ if __name__ == "__main__":
     else:
         romania_map = Greedy(road_map)
         c1, c2 = get_cities_input()
-        path_data = romania_map.find_path(c1, c2)
-        if path_data[0] == [] and path_data[1] == -1:
+        path, distance = romania_map.find_path(c1, c2)
+        if path == [] and distance == -1:
             print(
-                "The greedy algorithm was unable to find a path, it is caught \
-                in a loop/cycle.")
+                f"The greedy algorithm was unable to find a path between {c1} \
+                        and {c2}, it is caught in a loop/cycle.")
         else:
             print(f"The corresponding greedy path is: {
-                  path_data[0]} with a cost of {path_data[1]}")
+                path} with a cost of {distance}.")
