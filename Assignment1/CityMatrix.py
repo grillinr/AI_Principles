@@ -102,8 +102,7 @@ if __name__ == "__main__":
     for i, city in enumerate(road_map.list_cities(), 1):
         connections = road_map.get_connections(city)
         print(
-            f"{i}. {city} -> Connected to: {
-                ', '.join(f'{dest}({dist}km)' for dest, dist in connections.items())}"
+            f"{i}. {city} -> Connected to: {', '.join(f'{dest}({dist}km)' for dest, dist in connections.items())}"
         )
 
     print("\nEnter city names exactly as shown above")
@@ -111,7 +110,6 @@ if __name__ == "__main__":
         source_city = input("Enter Source City: ")
         destination_city = input("Enter Destination City: ")
         distance = road_map.get_distance(source_city, destination_city)
-        print(f"\nDistance from {source_city} to {
-              destination_city}: {distance} km")
+        print(f"\nDistance from {source_city} to {destination_city}: {distance} km")
     except ValueError as e:
         print(f"Error: {e}")
