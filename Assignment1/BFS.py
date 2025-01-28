@@ -2,7 +2,7 @@
 from CityMatrix import road_map, Map, get_cities_input
 from typing import List, Tuple
 
-DEBUG = False
+DEBUG = True
 
 
 class BFS:
@@ -21,7 +21,7 @@ class BFS:
         # sorts all of the connections by their costs before
         # adding them to the back of the queue
         connections = self.road_map.get_connections(source[0])
-        return [city for city in sorted(connections.keys())
+        return [city for city in sorted(connections, key=lambda x: connections[x])
                 if city not in self.visited]
 
     def find_path(self, source: str, destination: str) -> (List[str], int):
@@ -53,7 +53,8 @@ class BFS:
                 # calculate the path distance
                 distance = 0
                 for i in range(len(path)-1):
-                    distance += self.road_map.get_distance(path[i], path[i+1])
+                    distance += self.road_map.get_distance(
+                        path[i], path[i+1])
 
                 if DEBUG:
                     print("Found destination!")
@@ -109,7 +110,7 @@ def test_bfs() -> None:
         # test passes
         pass
 
-    print("\ntests pasted")
+        print("\ntests pasted")
 
 
 if __name__ == "__main__":
