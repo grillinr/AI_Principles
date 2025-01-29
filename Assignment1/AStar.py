@@ -9,7 +9,6 @@ from queue import PriorityQueue
 from CityMatrix import Map, road_map, get_cities_input, DEBUG
 import math
 
-
 # straight-line distances to Bucharest (our heuristic values)
 SLD_TO_BUCHAREST = {
     "Arad": 366,
@@ -103,7 +102,7 @@ class AStar:
                 if next_city not in cost_so_far or new_cost < cost_so_far[next_city]:
                     cost_so_far[next_city] = new_cost
                     # pure greedy - only uses heuristic
-                    priority = self.heuristic(next_city, goal)
+                    priority = self.heuristic(next_city, goal) + self.dist_traveled
                     pqueue.put(
                         PrioritizedCity(priority, next_city, current_city, new_cost)
                     )
@@ -148,14 +147,13 @@ def test_a_star() -> None:
     print(f"Cost: {cost}")
     assert path == [
         "Timisoara",
-        "Lugoj",
-        "Mehadia",
-        "Drobeta",
-        "Craiova",
+        "Arad",
+        "Sibiu",
+        "Rimnicu Vilcea",
         "Pitesti",
         "Bucharest",
     ], "Failed: Timisoara to Bucharest path incorrect"
-    assert cost != -1, "Failed: Should find a path from Timisoara to Bucharest"
+    assert cost == 536, "Failed: Should find a path from Timisoara to Bucharest"
 
     # Test 3: Try invalid city
     print("\nTest 3: Invalid city test")
