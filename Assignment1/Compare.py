@@ -30,4 +30,4 @@ if __name__ == "__main__":
         times.append(measure_algorithm_time(
             algo, cities, iterations=100))
     for alg, time in zip(algorithms, times):
-        print(f"{alg} took an average of {time}s.")
+        print(f"{alg.__self__.__class__.__repr__(alg)} took an average of {time}s.")
