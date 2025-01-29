@@ -4,10 +4,9 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 from queue import PriorityQueue
-from CityMatrix import Map, road_map, get_cities_input
+from CityMatrix import Map, road_map, get_cities_input, DEBUG
 import math
 
-DEBUG = False
 
 # Straight-line distances to Bucharest (our heuristic values)
 SLD_TO_BUCHAREST = {
@@ -39,7 +38,7 @@ class PrioritizedCity:
     priority: int
     city: str = None
     parent: str = None
-    g_cost: int = 0  # Path cost from start to current node
+    g_cost: int = 0  # path cost from start to current node
 
     def __eq__(self, other):
         if not isinstance(other, PrioritizedCity):
@@ -48,8 +47,11 @@ class PrioritizedCity:
 
 
 class GreedyBestFirst:
-    def __init__(self, road_map: Map):
+    def __init__(self, road_map: Map) -> None:
         self.road_map = road_map
+
+    def __repr__(self) -> str:
+        return "GreedyBestFirst Algorithm"
 
     def heuristic(self, city: str, goal: str) -> int:
         """Straight-line distance heuristic."""
@@ -60,10 +62,10 @@ class GreedyBestFirst:
 
         d1, d2 = SLD_TO_BUCHAREST[city], SLD_TO_BUCHAREST[goal]
 
-        # Approximate using the Euclidean distance formula and law of cosines
+        # approximate using the Euclidean distance formula and law of cosines
         estimated_dist = math.sqrt(
             d1**2 + d2**2 - 2 * d1 * d2 * math.cos(math.radians(60))
-        )  # Assume 60° between vectors
+        )  # assume 60° between vectors
 
         return estimated_dist.__ceil__()
 
@@ -72,7 +74,8 @@ class GreedyBestFirst:
             raise ValueError("Start or goal city not found in map")
 
         pqueue = PriorityQueue()
-        pqueue.put(PrioritizedCity(self.heuristic(start, goal), start, None, 0))
+        pqueue.put(PrioritizedCity(
+            self.heuristic(start, goal), start, None, 0))
 
         came_from: Dict[str, Optional[str]] = {start: None}
         cost_so_far: Dict[str, int] = {start: 0}
@@ -100,15 +103,16 @@ class GreedyBestFirst:
                     # Pure greedy - only uses heuristic
                     priority = self.heuristic(next_city, goal)
                     pqueue.put(
-                        PrioritizedCity(priority, next_city, current_city, new_cost)
+                        PrioritizedCity(priority, next_city,
+                                        current_city, new_cost)
                     )
                     came_from[next_city] = current_city
 
-        # If we didn't reach the goal
+        # if we didn't reach the goal
         if goal not in came_from:
             return [], -1
 
-        # Reconstruct path
+        # reconstruct path
         path = []
         current = goal
         total_cost = cost_so_far[goal]
@@ -118,10 +122,10 @@ class GreedyBestFirst:
             current = came_from[current]
 
         path.reverse()
-        return path, total_cost  # Remove start city from path
+        return path, total_cost
 
 
-def test_greedy_best_first():
+def test_greedy_best_first() -> None:
     romania = GreedyBestFirst(road_map)
 
     # Test 1: Path from Arad to Bucharest
@@ -179,5 +183,5 @@ if __name__ == "__main__":
         else:
             print(
                 f"The corresponding greedy path is: {
-                path} with a cost of {distance}."
+                    path} with a cost of {distance}."
             )
