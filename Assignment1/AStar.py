@@ -50,7 +50,6 @@ class PrioritizedCity:
 class AStar:
     def __init__(self, road_map: Map) -> None:
         self.road_map = road_map
-        self.dist_traveled = 0
 
     def __repr__(self) -> str:
         return "AStar Algorithm"
@@ -68,7 +67,6 @@ class AStar:
         estimated_dist = math.sqrt(
             d1**2 + d2**2 - 2 * d1 * d2 * math.cos(math.radians(60))
         )  # assume 60° between vectors, no good way of estimating this
-
         return estimated_dist.__ceil__()
 
     def find_path(self, start: str, goal: str) -> Tuple[List[str], int]:
@@ -98,11 +96,10 @@ class AStar:
                 current_city
             ).items():
                 new_cost = cost_so_far[current_city] + distance
-                self.dist_traveled += new_cost
                 if next_city not in cost_so_far or new_cost < cost_so_far[next_city]:
                     cost_so_far[next_city] = new_cost
                     # pure greedy - only uses heuristic
-                    priority = self.heuristic(next_city, goal) + self.dist_traveled
+                    priority = self.heuristic(next_city, goal) + new_cost
                     pqueue.put(
                         PrioritizedCity(priority, next_city, current_city, new_cost)
                     )
@@ -135,10 +132,11 @@ def test_a_star() -> None:
     assert path == [
         "Arad",
         "Sibiu",
-        "Fagaras",
+        "Rimnicu Vilcea",
+        "Pitesti",
         "Bucharest",
     ], "Failed: Arad to Bucharest path incorrect"
-    assert cost == 450, "Failed: Arad to Bucharest cost incorrect"
+    assert cost == 418, "Failed: Arad to Bucharest cost incorrect"
 
     # Test 2: Path from Timisoara to Bucharest
     path, cost = romania.find_path("Timisoara", "Bucharest")
@@ -175,11 +173,11 @@ if __name__ == "__main__":
         path, distance = romania_map.find_path(c1, c2)
         if path == [] and distance == -1:
             print(
-                f"The greedy algorithm was unable to find a path between {c1} \
+                f"The A* algorithm was unable to find a path between {c1} \
                         and {c2}, it is caught in a loop/cycle."
             )
         else:
             print(
-                f"The corresponding greedy path is: {
+                f"The corresponding A* path is: {
                     path} with a cost of {distance}."
             )

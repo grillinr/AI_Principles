@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Union, List, Dict, Tuple
 
-DEBUG = False
+DEBUG = True
 
 
 @dataclass
@@ -113,7 +113,9 @@ if __name__ == "__main__":
         source_city = input("Enter Source City: ")
         destination_city = input("Enter Destination City: ")
         distance = road_map.get_distance(source_city, destination_city)
-        print(f"\nDistance from {source_city} to {
-              destination_city}: {distance} km")
+        print(
+            f"\nDistance from {source_city} to {
+              destination_city}: {distance} km"
+        )
     except ValueError as e:
         print(f"Error: {e}")
