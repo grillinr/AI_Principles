@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 from queue import PriorityQueue
 from CityMatrix import Map, road_map, get_cities_input
-
+import math
 
 DEBUG = False
 
@@ -53,13 +53,19 @@ class GreedyBestFirst:
 
     def heuristic(self, city: str, goal: str) -> int:
         """Straight-line distance heuristic."""
-        # In a real implementation, we would calculate this using actual coordinates
-        # For this example, we're using pre-calculated values to Bucharest
-        if goal != "Bucharest":
-            raise ValueError(
-                "This implementation only supports paths to Bucharest as the goal"
-            )
-        return SLD_TO_BUCHAREST[city]
+        if city == "Bucharest":
+            return SLD_TO_BUCHAREST[goal]
+        if goal == "Bucharest":
+            return SLD_TO_BUCHAREST[city]
+
+        d1, d2 = SLD_TO_BUCHAREST[city], SLD_TO_BUCHAREST[goal]
+
+        # Approximate using the Euclidean distance formula and law of cosines
+        estimated_dist = math.sqrt(
+            d1**2 + d2**2 - 2 * d1 * d2 * math.cos(math.radians(60))
+        )  # Assume 60° between vectors
+
+        return estimated_dist.__ceil__()
 
     def find_path(self, start: str, goal: str) -> Tuple[List[str], int]:
         if start not in self.road_map.roads or goal not in self.road_map.roads:
