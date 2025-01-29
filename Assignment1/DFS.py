@@ -20,8 +20,8 @@ class DFS:
         self.parent = {}
 
     def get_sorted_city_dests(self, source) -> Tuple[List[str], int]:
-        # Sorts all the connections of the source city by name and returns the list of cities
-        # In descending order, so that the closest city is at the front of the queue
+        # sorts all the connections of the source city by name and returns the list of cities
+        # in descending order, so that the closest city is at the front of the queue
         connections = self.road_map.get_connections(source[0])
         sorted_connections = {}
         for key in sorted(connections, key=connections.get, reverse=True):
@@ -30,7 +30,7 @@ class DFS:
         return [city for city in sorted_connections if city not in self.visited]
 
     def find_path(self, source: str, destination: str) -> (List[str], int):
-        # First City Setup
+        # first City Setup
         self.reset(road_map)
         self.queue.append((source, 0))
         self.visited.append(source)
@@ -40,12 +40,12 @@ class DFS:
                 print(f"Queue: {self.queue}")
                 print(f"Visited: {self.visited}")
 
-            # Gets the current city that has just been visited from the queue
+            # gets the current city that has just been visited from the queue
             current, parent = self.queue.pop(0)
             self.visited.append(current)
             self.parent[current] = parent
 
-            # If the current city is the destination, break the loop and
+            # if the current city is the destination, break the loop and
             # return the path
             if current == destination:
                 path = []
@@ -55,7 +55,6 @@ class DFS:
                 path.append(source)
                 path.reverse()
 
-                # Calculate the distance traveled
                 distance = 0
                 for i in range(len(path)-1):
                     distance += self.road_map.get_distance(path[i], path[i+1])
@@ -66,11 +65,11 @@ class DFS:
                 self.reset(road_map)
                 return ret
 
-            # Get the sorted list of cities from the current city
+            # get the sorted list of cities from the current city
             currentCity = road_map.get_city(current)
             next_cities = self.get_sorted_city_dests(currentCity)
 
-            # Add the next cities to the front of the queue
+            # add the next cities to the front of the queue
             for next_city in next_cities:
                 if next_city not in self.visited:
                     self.queue.insert(0, (next_city, current))

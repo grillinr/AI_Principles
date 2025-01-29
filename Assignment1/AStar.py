@@ -10,7 +10,7 @@ from CityMatrix import Map, road_map, get_cities_input, DEBUG
 import math
 
 
-# Straight-line distances to Bucharest (our heuristic values)
+# straight-line distances to Bucharest (our heuristic values)
 SLD_TO_BUCHAREST = {
     "Arad": 366,
     "Bucharest": 0,
@@ -40,7 +40,7 @@ class PrioritizedCity:
     priority: int
     city: str = None
     parent: str = None
-    g_cost: int = 0  # Path cost from start to current node
+    g_cost: int = 0  # path cost from start to current node
 
     def __eq__(self, other):
         if not isinstance(other, PrioritizedCity):
@@ -64,10 +64,10 @@ class AStar:
 
         d1, d2 = SLD_TO_BUCHAREST[city], SLD_TO_BUCHAREST[goal]
 
-        # Approximate using the Euclidean distance formula and law of cosines
+        # approximate using the Euclidean distance formula and law of cosines
         estimated_dist = math.sqrt(
             d1**2 + d2**2 - 2 * d1 * d2 * math.cos(math.radians(60))
-        )  # Assume 60° between vectors
+        )  # assume 60° between vectors, no good way of estimating this
 
         return estimated_dist.__ceil__()
 
@@ -94,7 +94,7 @@ class AStar:
                     print("We are in the right city.")
                 break
 
-            # Get all neighbors of current city
+            # get all neighbors of current city
             for next_city, distance in self.road_map.get_connections(
                 current_city
             ).items():
@@ -102,7 +102,7 @@ class AStar:
 
                 if next_city not in cost_so_far or new_cost < cost_so_far[next_city]:
                     cost_so_far[next_city] = new_cost
-                    # Pure greedy - only uses heuristic
+                    # pure greedy - only uses heuristic
                     priority = self.heuristic(next_city, goal)
                     pqueue.put(
                         PrioritizedCity(priority, next_city,
@@ -110,11 +110,10 @@ class AStar:
                     )
                     came_from[next_city] = current_city
 
-        # If we didn't reach the goal
         if goal not in came_from:
             return [], -1
 
-        # Reconstruct path
+        # reconstruct path
         path = []
         current = goal
         total_cost = cost_so_far[goal]
@@ -124,7 +123,7 @@ class AStar:
             current = came_from[current]
 
         path.reverse()
-        return path, total_cost  # Remove start city from path
+        return path, total_cost
 
 
 def test_a_star() -> None:

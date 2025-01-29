@@ -38,7 +38,7 @@ class PrioritizedCity:
     priority: int
     city: str = None
     parent: str = None
-    g_cost: int = 0  # Path cost from start to current node
+    g_cost: int = 0  # path cost from start to current node
 
     def __eq__(self, other):
         if not isinstance(other, PrioritizedCity):
@@ -62,10 +62,10 @@ class GreedyBestFirst:
 
         d1, d2 = SLD_TO_BUCHAREST[city], SLD_TO_BUCHAREST[goal]
 
-        # Approximate using the Euclidean distance formula and law of cosines
+        # approximate using the Euclidean distance formula and law of cosines
         estimated_dist = math.sqrt(
             d1**2 + d2**2 - 2 * d1 * d2 * math.cos(math.radians(60))
-        )  # Assume 60° between vectors
+        )  # assume 60° between vectors
 
         return estimated_dist.__ceil__()
 
@@ -108,11 +108,11 @@ class GreedyBestFirst:
                     )
                     came_from[next_city] = current_city
 
-        # If we didn't reach the goal
+        # if we didn't reach the goal
         if goal not in came_from:
             return [], -1
 
-        # Reconstruct path
+        # reconstruct path
         path = []
         current = goal
         total_cost = cost_so_far[goal]
@@ -122,7 +122,7 @@ class GreedyBestFirst:
             current = came_from[current]
 
         path.reverse()
-        return path, total_cost  # Remove start city from path
+        return path, total_cost
 
 
 def test_greedy_best_first() -> None:
