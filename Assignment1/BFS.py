@@ -9,6 +9,9 @@ class BFS:
     def __init__(self, road_map):
         self.reset(road_map)
 
+    def __repr__(self):
+        return "BFS Algorithm"
+
     def reset(self, road_map):
         self.road_map: Map = road_map
         self.distance_traveled: int = 0

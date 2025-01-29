@@ -5,9 +5,13 @@ from typing import List, Tuple
 
 DEBUG = True
 
+
 class DFS:
     def __init__(self, road_map) -> None:
         self.reset(road_map)
+
+    def __repr__(self):
+        return "DFS Algorithm"
 
     def reset(self, road_map):
         self.road_map: Map = road_map
@@ -25,10 +29,8 @@ class DFS:
         for key in sorted(connections, key=connections.get, reverse=True):
             sorted_connections[key] = connections[key]
 
-        
         return [city for city in sorted_connections if city not in self.visited]
 
-    
     def find_path(self, source: str, destination: str) -> (List[str], int):
         # First City Setup
         self.reset(road_map)
@@ -39,13 +41,13 @@ class DFS:
             if DEBUG:
                 print(f"Queue: {self.queue}")
                 print(f"Visited: {self.visited}")
-            
-            # Gets the current city that has just been visited from the queue 
+
+            # Gets the current city that has just been visited from the queue
             current, parent = self.queue.pop(0)
             self.visited.append(current)
             self.parent[current] = parent
 
-            # If the current city is the destination, break the loop and 
+            # If the current city is the destination, break the loop and
             # return the path
             if current == destination:
                 path = []
@@ -59,7 +61,7 @@ class DFS:
                 distance = 0
                 for i in range(len(path)-1):
                     distance += self.road_map.get_distance(path[i], path[i+1])
-                
+
                 if DEBUG:
                     print("Found destination!")
                 ret = path, distance
@@ -81,28 +83,32 @@ class DFS:
 
         # If no path is found
         return [], -1
-    
+
+
 def test_dfs() -> None:
     # Based off the way this DFS algorithm works(choosing the shortest path to continue down) these paths are not optimal
     # but they are the expected paths based on the algorithm implementation
     romania_map = DFS(road_map)
 
     # Test Oradea to Bucharest
-    assert romania_map.find_path("Oradea", "Bucharest") == (['Oradea', 'Zerind', 'Arad', 'Timisoara', 'Lugoj', 'Mehadia', 'Drobeta', 'Craiova', 'Pitesti', 'Rimnicu Vilcea', 'Sibiu', 'Fagaras', 'Bucharest'], 1265), "Oradea to Bucharest failed."
+    assert romania_map.find_path("Oradea", "Bucharest") == (['Oradea', 'Zerind', 'Arad', 'Timisoara', 'Lugoj', 'Mehadia',
+                                                             'Drobeta', 'Craiova', 'Pitesti', 'Rimnicu Vilcea', 'Sibiu', 'Fagaras', 'Bucharest'], 1265), "Oradea to Bucharest failed."
 
     print("\n\n")
 
     # Test Arad to Hirsova
-    assert romania_map.find_path("Arad", "Hirsova") == (['Arad', 'Zerind', 'Oradea', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest', 'Urziceni', 'Hirsova'], 758), "Arad to Hirsova failed."
+    assert romania_map.find_path("Arad", "Hirsova") == (
+        ['Arad', 'Zerind', 'Oradea', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest', 'Urziceni', 'Hirsova'], 758), "Arad to Hirsova failed."
 
     print("\n\n")
 
     # Test Craiova to Neamt
-    assert romania_map.find_path("Craiova", "Neamt") == (['Craiova', 'Drobeta', 'Mehadia', 'Lugoj', 'Timisoara', 'Arad', 'Zerind', 'Oradea', 'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest', 'Urziceni', 'Vaslui', 'Iasi', 'Neamt'], 1475), "Craiova to Neamt failed."
+    assert romania_map.find_path("Craiova", "Neamt") == (['Craiova', 'Drobeta', 'Mehadia', 'Lugoj', 'Timisoara', 'Arad', 'Zerind', 'Oradea',
+                                                          'Sibiu', 'Rimnicu Vilcea', 'Pitesti', 'Bucharest', 'Urziceni', 'Vaslui', 'Iasi', 'Neamt'], 1475), "Craiova to Neamt failed."
 
     print("\n\n")
 
-     # missing city
+    # missing city
     try:
         romania_map.find_path("mycity", "Bucharest")
         assert False, "invalid city test failed"
@@ -112,6 +118,7 @@ def test_dfs() -> None:
 
         print("\ntests pasted")
 
+
 if __name__ == "__main__":
     if DEBUG:
         test_dfs()
@@ -120,6 +127,7 @@ if __name__ == "__main__":
         c1, c2 = get_cities_input()
         path, distance = romania_map.find_path(c1, c2)
         if path:
-            print(f"The corresponding DFS path is: {path} with a cost of {distance}")
+            print(f"The corresponding DFS path is: {
+                  path} with a cost of {distance}")
         else:
             print(f"No path found between {c1} and {c2}.")

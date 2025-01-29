@@ -53,6 +53,9 @@ class AStar:
     def __init__(self, road_map: Map):
         self.road_map = road_map
 
+    def __repr__(self):
+        return "AStar Algorithm"
+
     def heuristic(self, city: str, goal: str) -> int:
         """Straight-line distance heuristic."""
         if city == "Bucharest":
