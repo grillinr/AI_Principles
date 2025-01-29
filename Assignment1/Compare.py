@@ -16,10 +16,11 @@ if __name__ == "__main__":
 
     def measure_algorithm_time(algorithm, cities, iterations=100):
         def run_for_all_cities():
-            for city in cities:
-                algorithm(city)
+            for c1 in cities:
+                for c2 in cities:
+                    algorithm(c1, c2)
 
-        total_time = timeit.timeit(run_for_all_cities, number=iterations)
+        total_time = timeit(run_for_all_cities, number=iterations)
         average_time = total_time / iterations
         return average_time
 
