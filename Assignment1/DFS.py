@@ -1,9 +1,7 @@
 # In Depth First Search, the first child of the current node is put
 # in the front of the queue
-from CityMatrix import Map, road_map, get_cities_input
+from CityMatrix import Map, road_map, get_cities_input, DEBUG
 from typing import List, Tuple
-
-DEBUG = True
 
 
 class DFS:
@@ -65,7 +63,6 @@ class DFS:
                 if DEBUG:
                     print("Found destination!")
                 ret = path, distance
-                print(ret)
                 self.reset(road_map)
                 return ret
 

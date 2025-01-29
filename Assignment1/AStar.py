@@ -6,10 +6,9 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 from queue import PriorityQueue
-from CityMatrix import Map, road_map, get_cities_input
+from CityMatrix import Map, road_map, get_cities_input, DEBUG
 import math
 
-DEBUG = False
 
 # Straight-line distances to Bucharest (our heuristic values)
 SLD_TO_BUCHAREST = {

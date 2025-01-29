@@ -1,8 +1,6 @@
 # In breadth first, all the children of the current node are put in the at the back of the queue.
-from CityMatrix import road_map, Map, get_cities_input
+from CityMatrix import road_map, Map, get_cities_input, DEBUG
 from typing import List, Tuple
-
-DEBUG = True
 
 
 class BFS:
@@ -62,7 +60,6 @@ class BFS:
                 if DEBUG:
                     print("Found destination!")
                 ret = path, distance
-                print(ret)
                 self.reset(road_map)
                 return ret
 

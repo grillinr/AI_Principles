@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Union, List, Dict, Tuple
 
+DEBUG = False
+
 
 @dataclass
 class Map:
