@@ -52,6 +52,7 @@ class PrioritizedCity:
 class AStar:
     def __init__(self, road_map: Map):
         self.road_map = road_map
+        self.dist_traveled = 0
 
     def heuristic(self, city: str, goal: str) -> int:
         """Straight-line distance heuristic."""
@@ -74,8 +75,7 @@ class AStar:
             raise ValueError("Start or goal city not found in map")
 
         pqueue = PriorityQueue()
-        pqueue.put(PrioritizedCity(
-            self.heuristic(start, goal), start, None, 0))
+        pqueue.put(PrioritizedCity(self.heuristic(start, goal), start, None, 0))
 
         came_from: Dict[str, Optional[str]] = {start: None}
         cost_so_far: Dict[str, int] = {start: 0}
@@ -97,14 +97,13 @@ class AStar:
                 current_city
             ).items():
                 new_cost = cost_so_far[current_city] + distance
-
+                self.dist_traveled += new_cost
                 if next_city not in cost_so_far or new_cost < cost_so_far[next_city]:
                     cost_so_far[next_city] = new_cost
                     # Pure greedy - only uses heuristic
-                    priority = self.heuristic(next_city, goal)
+                    priority = self.heuristic(next_city, goal) + self.dist_traveled
                     pqueue.put(
-                        PrioritizedCity(priority, next_city,
-                                        current_city, new_cost)
+                        PrioritizedCity(priority, next_city, current_city, new_cost)
                     )
                     came_from[next_city] = current_city
 
