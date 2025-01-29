@@ -30,7 +30,7 @@ SLD_TO_BUCHAREST = {
     "Timisoara": 329,
     "Urziceni": 80,
     "Vaslui": 199,
-    "Zerind": 374
+    "Zerind": 374,
 }
 
 
@@ -57,7 +57,8 @@ class GreedyBestFirst:
         # For this example, we're using pre-calculated values to Bucharest
         if goal != "Bucharest":
             raise ValueError(
-                "This implementation only supports paths to Bucharest as the goal")
+                "This implementation only supports paths to Bucharest as the goal"
+            )
         return SLD_TO_BUCHAREST[city]
 
     def find_path(self, start: str, goal: str) -> Tuple[List[str], int]:
@@ -65,8 +66,7 @@ class GreedyBestFirst:
             raise ValueError("Start or goal city not found in map")
 
         pqueue = PriorityQueue()
-        pqueue.put(PrioritizedCity(
-            self.heuristic(start, goal), start, None, 0))
+        pqueue.put(PrioritizedCity(self.heuristic(start, goal), start, None, 0))
 
         came_from: Dict[str, Optional[str]] = {start: None}
         cost_so_far: Dict[str, int] = {start: 0}
@@ -84,15 +84,18 @@ class GreedyBestFirst:
                 break
 
             # Get all neighbors of current city
-            for next_city, distance in self.road_map.get_connections(current_city).items():
+            for next_city, distance in self.road_map.get_connections(
+                current_city
+            ).items():
                 new_cost = cost_so_far[current_city] + distance
 
                 if next_city not in cost_so_far or new_cost < cost_so_far[next_city]:
                     cost_so_far[next_city] = new_cost
                     # Pure greedy - only uses heuristic
                     priority = self.heuristic(next_city, goal)
-                    pqueue.put(PrioritizedCity(
-                        priority, next_city, current_city, new_cost))
+                    pqueue.put(
+                        PrioritizedCity(priority, next_city, current_city, new_cost)
+                    )
                     came_from[next_city] = current_city
 
         # If we didn't reach the goal
@@ -117,20 +120,31 @@ def test_greedy_best_first():
 
     # Test 1: Path from Arad to Bucharest
     path, cost = romania.find_path("Arad", "Bucharest")
-    print(f"Test 1: Arad to Bucharest")
+    print("Test 1: Arad to Bucharest")
     print(f"Path: {path}")
     print(f"Cost: {cost}")
-    assert path == ['Arad', 'Sibiu', 'Fagaras',
-                    'Bucharest'], "Failed: Arad to Bucharest path incorrect"
+    assert path == [
+        "Arad",
+        "Sibiu",
+        "Fagaras",
+        "Bucharest",
+    ], "Failed: Arad to Bucharest path incorrect"
     assert cost == 450, "Failed: Arad to Bucharest cost incorrect"
 
     # Test 2: Path from Timisoara to Bucharest
     path, cost = romania.find_path("Timisoara", "Bucharest")
-    print(f"\nTest 2: Timisoara to Bucharest")
+    print("\nTest 2: Timisoara to Bucharest")
     print(f"Path: {path}")
     print(f"Cost: {cost}")
-    assert path == ['Timisoara', 'Lugoj', 'Mehadia', 'Drobeta', 'Craiova',
-                    'Pitesti', 'Bucharest'], "Failed: Timisoara to Bucharest path incorrect"
+    assert path == [
+        "Timisoara",
+        "Lugoj",
+        "Mehadia",
+        "Drobeta",
+        "Craiova",
+        "Pitesti",
+        "Bucharest",
+    ], "Failed: Timisoara to Bucharest path incorrect"
     assert cost != -1, "Failed: Should find a path from Timisoara to Bucharest"
 
     # Test 3: Try invalid city
@@ -154,7 +168,10 @@ if __name__ == "__main__":
         if path == [] and distance == -1:
             print(
                 f"The greedy algorithm was unable to find a path between {c1} \
-                        and {c2}, it is caught in a loop/cycle.")
+                        and {c2}, it is caught in a loop/cycle."
+            )
         else:
-            print(f"The corresponding greedy path is: {
-                path} with a cost of {distance}.")
+            print(
+                f"The corresponding greedy path is: {
+                path} with a cost of {distance}."
+            )
