@@ -67,7 +67,8 @@ class AStar:
             raise ValueError("Start or goal city not found in map")
 
         pqueue = PriorityQueue()
-        pqueue.put(PrioritizedCity(self.heuristic(start, goal), start, None, 0))
+        pqueue.put(PrioritizedCity(
+            self.heuristic(start, goal), start, None, 0))
 
         came_from: Dict[str, Optional[str]] = {start: None}
         cost_so_far: Dict[str, int] = {start: 0}
@@ -95,7 +96,8 @@ class AStar:
                     # Pure greedy - only uses heuristic
                     priority = self.heuristic(next_city, goal)
                     pqueue.put(
-                        PrioritizedCity(priority, next_city, current_city, new_cost)
+                        PrioritizedCity(priority, next_city,
+                                        current_city, new_cost)
                     )
                     came_from[next_city] = current_city
 
@@ -174,5 +176,5 @@ if __name__ == "__main__":
         else:
             print(
                 f"The corresponding greedy path is: {
-                path} with a cost of {distance}."
+                    path} with a cost of {distance}."
             )
