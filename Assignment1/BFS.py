@@ -6,13 +6,13 @@ DEBUG = True
 
 
 class BFS:
-    def __init__(self, road_map):
+    def __init__(self, road_map) -> None:
         self.reset(road_map)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "BFS Algorithm"
 
-    def reset(self, road_map):
+    def reset(self, road_map) -> None:
         self.road_map: Map = road_map
         self.distance_traveled: int = 0
         self.path = []

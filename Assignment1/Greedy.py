@@ -48,10 +48,10 @@ class PrioritizedCity:
 
 
 class GreedyBestFirst:
-    def __init__(self, road_map: Map):
+    def __init__(self, road_map: Map) -> None:
         self.road_map = road_map
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "GreedyBestFirst Algorithm"
 
     def heuristic(self, city: str, goal: str) -> int:
@@ -126,7 +126,7 @@ class GreedyBestFirst:
         return path, total_cost  # Remove start city from path
 
 
-def test_greedy_best_first():
+def test_greedy_best_first() -> None:
     romania = GreedyBestFirst(road_map)
 
     # Test 1: Path from Arad to Bucharest

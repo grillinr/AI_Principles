@@ -10,7 +10,7 @@ class DFS:
     def __init__(self, road_map) -> None:
         self.reset(road_map)
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         return "DFS Algorithm"
 
     def reset(self, road_map):
