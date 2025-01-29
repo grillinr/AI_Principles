@@ -25,7 +25,9 @@ if __name__ == "__main__":
         return average_time
 
     algorithms = [greedy, bfs, dfs, astar]
+    times = []
     for idx, algo in enumerate(algorithms, start=1):
-        avg_time = measure_algorithm_time(algo, cities, iterations=100)
-        print(f"Algorithm {idx}: Average time per iteration: {
-              avg_time:.6f} seconds")
+        times.append(measure_algorithm_time(
+            algo, cities, iterations=100))
+    for alg, time in zip(algorithms, times):
+        print(f"{alg} took an average of {time}s.")
