@@ -77,7 +77,7 @@ class BFS:
                 print("continuing...")
 
         # no path found
-        return [], 0
+        return [], -1
 
 
 def test_bfs() -> None:
