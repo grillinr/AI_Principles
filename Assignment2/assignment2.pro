@@ -47,3 +47,22 @@ road(zerind, oradea, 71).
 % Define a bidirectional road rule
 connected(X, Y, D) :- road(X, Y, D).
 connected(X, Y, D) :- road(Y, X, D).
+
+% BFS to reach Bucharest from any starting city
+bfs(Start) :-
+    bfs_helper([[Start]], bucharest).
+
+% case where bucharest is found
+bfs_helper([[bucharest | Path] | _], _) :-
+    reverse([bucharest | Path], FullPath),
+    % using the ! (cut) operator stops the query
+    write('Path: '), write(FullPath), nl, !.
+
+bfs_helper([[Current | Path] | Queue], Dest) :-
+    % generate new paths
+    findall([Next, Current | Path],
+        (connected(Current, Next, _), \+ member(Next, [Current | Path])),
+        NewPaths),
+    % queue newly generated paths
+    append(Queue, NewPaths, UpdatedQueue),
+    bfs_helper(UpdatedQueue, Dest).
