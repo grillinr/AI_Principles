@@ -80,12 +80,21 @@ bfs(Start) :-
 
 % case where bucharest is found
 bfs_helper([[bucharest | Path] | _], _) :-
+    % reverse the path as the path as been prepended,
+    % not appended!
     reverse([bucharest | Path], FullPath),
     % using the ! (cut) operator stops the query
+    % and only displays the first path found.
+    % Note: without this, there will be many
+    % more results
     write('Path: '), write(FullPath), nl, !.
 
 bfs_helper([[Current | Path] | Queue], Dest) :-
     % generate new paths
+    % finds every node Next connected to Current
+    % ensures Next is not already in the current path
+    % creates a partial path for each valid Next
+    % and collects them into NewPaths
     findall([Next, Current | Path],
         (connected(Current, Next, _), \+ member(Next, [Current | Path])),
         NewPaths),
