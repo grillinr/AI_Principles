@@ -1,4 +1,4 @@
-% Define roads and distances between cities
+% define roads and distances between cities
 road(arad, timisoara, 118).
 road(arad, zerind, 75).
 road(arad, sibiu, 140).
@@ -44,10 +44,36 @@ road(vaslui, urziceni, 142).
 road(zerind, arad, 75).
 road(zerind, oradea, 71).
 
-% Define a bidirectional road rule
+% define the heuristic as the straight-line distance to Bucharest
+dist(arad, 366).
+dist(bucharest, 0).
+dist(craiova, 160).
+dist(drobeta, 242).
+dist(eforie, 161).
+dist(fagaras, 176).
+dist(giurgiu, 77).
+dist(hirsova, 151).
+dist(iasi, 226).
+dist(lugoj, 244).
+dist(mehadia, 241).
+dist(neamt, 234).
+dist(oradea, 380).
+dist(pitesti, 100).
+dist(rimnicu_vilcea, 193).
+dist(sibiu, 253).
+dist(timisoara, 329).
+dist(urziceni, 80).
+dist(vaslui, 199).
+dist(zerind, 374).
+
+
+% define a bidirectional road rule
 connected(X, Y, D) :- road(X, Y, D).
 connected(X, Y, D) :- road(Y, X, D).
 
+
+
+%************** BFS ****************%
 % BFS to reach Bucharest from any starting city
 bfs(Start) :-
     bfs_helper([[Start]], bucharest).
@@ -66,3 +92,63 @@ bfs_helper([[Current | Path] | Queue], Dest) :-
     % queue newly generated paths
     append(Queue, NewPaths, UpdatedQueue),
     bfs_helper(UpdatedQueue, Dest).
+
+%************** END BFS ****************%
+
+
+
+%************** DFS ****************%
+% DFS to reach Bucharest from any starting city
+dfs(Start) :-
+    dfs_helper([Start], bucharest).
+
+% case where Bucharest is found
+dfs_helper([bucharest | Path], _) :-
+    reverse([bucharest | Path], FullPath),
+    write('Path: '), write(FullPath), nl, !.
+
+dfs_helper([Current | Path], Dest) :-
+    connected(Current, Next, _),
+    \+ member(Next, [Current | Path]),
+    dfs_helper([Next, Current | Path], Dest).
+
+%************** END DFS ****************%
+
+
+
+%************** GREEDY ****************%
+% greedy search to reach Bucharest from any starting city
+% while maintaing what has been visited
+greedy(Start) :-
+    greedy_helper([[Start]], []).
+
+% case where Bucharest is found
+greedy_helper([[bucharest | Path] | _], _) :-
+    reverse([bucharest | Path], FullPath),
+    write('Path: '), write(FullPath), nl, !.
+
+greedy_helper([[Current | Path] | Queue], Visited) :-
+    % generate new paths
+    findall([Next, Current | Path],
+        (connected(Current, Next, _), \+ member(Next, [Current | Path])), NewPaths),
+    
+    % sort new paths by straight-line distance to Bucharest
+    sort_by_distance(NewPaths, SortedNewPaths),
+    
+    % append sorted paths to the queue
+    append(SortedNewPaths, Queue, UpdatedQueue),
+    greedy_helper(UpdatedQueue, [Current | Visited]).
+
+% sort paths by distance
+sort_by_distance(Paths, Sorted_Paths) :-
+    % map list of Paths to each ones distance
+    map_list_to_pairs(heuristic_function, Paths, Dist_Path_Pairs),
+    keysort(Dist_Path_Pairs, Sorted_Dist_Path_Pairs),
+    pairs_values(Sorted_Dist_Path_Pairs, Sorted_Paths).
+    
+% explicit Heuristic Function 
+% needed to map path list to their distance
+heuristic_function([City | _], Dist) :-
+    dist(City, Dist).
+
+%************** END GREEDY ****************%
