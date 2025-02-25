@@ -70,7 +70,7 @@ dist(zerind, 374).
 connected(X, Y, D) :- road(X, Y, D).
 connected(X, Y, D) :- road(Y, X, D).
 
-% DFS to reach Bucharest from any starting city
+% Greedy Search to reach Bucharest from any starting city
 % While maintaing what has been visited
 greedy(Start) :-
     greedy_helper([[Start]], []).
