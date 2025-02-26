@@ -145,14 +145,25 @@ greedy_helper([[Current | Path] | Queue], Visited) :-
     sort_by_distance(NewPaths, SortedNewPaths),
     
     % append sorted paths to the queue
+    % shortest distance gets added first
+    % so the next city visited will be the 
+    % city with shortest distance to Bucharest
     append(SortedNewPaths, Queue, UpdatedQueue),
+    
+    % Recursively perform greedy searches
+    % using the updated priority queue
     greedy_helper(UpdatedQueue, [Current | Visited]).
 
 % sort paths by distance
 sort_by_distance(Paths, Sorted_Paths) :-
-    % map list of Paths to each ones distance
+    % map list of Paths to each ones distance as the key
     map_list_to_pairs(heuristic_function, Paths, Dist_Path_Pairs),
+
+    % sort pairs based on the key/distance to Bucharest
     keysort(Dist_Path_Pairs, Sorted_Dist_Path_Pairs),
+
+    % remove the key values to get 
+    % the cities in order
     pairs_values(Sorted_Dist_Path_Pairs, Sorted_Paths).
     
 % explicit Heuristic Function 
