@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
+import random
+from datetime import datetime
+
 # team: Derek Corniello, Ryan Sippy, Nathan Grilliot
 # linear regression implementation for insurance.csv dataset
 
@@ -20,6 +23,11 @@ def normal_eq(X, y):
     return np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y
 
 
+# this can be replaced to give true randomness
+# our writeup rxplores one run of this!
+seed = random.seed(datetime.now().timestamp())
+
+
 # define a bunch of storage vars, used later, annotated with
 # what it is used for
 
@@ -34,8 +42,9 @@ for size in train_sizes:
     # split data into training and test sets with specified size
     # save the 50% split for part 2 of the assignment
 
+    #
     train_set, test_set = train_test_split(
-        data, train_size=size, random_state=42)
+        data, train_size=size, random_state=seed)
     if size == 0.5:
         saved_split_50 = (train_set, test_set)
 
